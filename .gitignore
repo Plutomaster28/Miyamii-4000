@@ -1,0 +1,60 @@
+# .gitignore for Miyamii-4000 Project
+
+# Simulation outputs
+*.vcd
+*.fst
+*.ghw
+*.out
+miyamii_4000_sim
+*.log
+
+# Verilator build
+obj_dir/
+*.d
+*.o
+
+# Synthesis outputs
+synth_*.v
+*.blif
+*.json
+
+# OpenLane outputs
+runs/
+*.sdc.old
+*.def
+*.gds
+*.lef
+*.mag
+*.spice
+
+# Yosys
+*.ilang
+yosys.log
+
+# GTKWave
+*.gtkw
+
+# Backup files
+*~
+*.swp
+*.swo
+*.bak
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Python (if you add scripts later)
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+ENV/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
