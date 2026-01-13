@@ -1,224 +1,67 @@
-# Miyamii-4000 4-Bit Processor
+# Miyamii-4000
 
-🚀 An overkill high school engineering project - A complete 4-bit microprocessor implementation in Verilog, inspired by the Intel 4004 architecture, designed for the OpenLane ASIC flow.
+yeah so this is a 4-bit processor i guess. like it does processor things but with 4 bits at a time lmao
 
-## Quick Stats
+## what even is this
 
-- **Architecture**: 4-bit data path, 12-bit address space
-- **Clock**: 740 kHz (10.8 μs period)
-- **Instructions**: 45+ instructions, 8-cycle execution
-- **Memory**: 4KB ROM, 1280x4-bit RAM
-- **Registers**: 16x4-bit + 4-bit accumulator + carry flag
-- **Stack**: 3-level deep for subroutine calls
+its basically a tiny cpu that runs on 4 bits. inspired by the intel 4004 cuz that was also 4-bit and apparently good enough to send people to the moon or whatever. this one probably cant do that but it can count and do math i think
 
-## Features
+- 4-bit data path (so like... 0-15 max)
+- 45 something instructions
+- has registers and stuff
+- can jump around in code
+- made in verilog for some reason
 
-✅ Complete instruction set (arithmetic, logic, branching, I/O)  
-✅ Register file with pair addressing  
-✅ 3-level call stack  
-✅ Conditional branches  
-✅ BCD arithmetic support  
-✅ RAM and ROM I/O ports  
-✅ OpenLane-ready configuration  
-✅ Full testbench included  
+## quick start i guess
 
-## Quick Start
-
-### Simulation
+wanna run it? just do this:
 
 ```bash
-# Compile and run
-make sim
-
-# View waveforms
-make view
-
-# Lint check
-make lint
+make sim      # runs the thing
+make view     # look at some waveforms
+make lint     # check if i messed up
 ```
 
-### OpenLane Flow
+for the openlane asic flow thing just run `./run_openlane.sh` and pray it works
 
-**Using Docker (Easiest - No Installation):**
-```bash
-# Use the helper script
-./run_openlane.sh
+## where to find actual info
 
-# Or run directly
-docker run -it --rm -v $(pwd):/project \
-  efabless/openlane:latest \
-  bash -c "cd /project && flow.tcl -design . -tag run1"
-```
+look i cant be bothered to write everything here so just check these out:
 
-**With Local OpenLane:**
-```bash
-cd <openlane_root>
-./flow.tcl -design <path_to_Miyamii-4000> -tag run1
-```
+- [docs/README.md](docs/README.md) - has all the detailed architecture stuff
+- [docs/INSTRUCTION_SET.md](docs/INSTRUCTION_SET.md) - lists all the instructions and what they do
+- [docs/ARCHITECTURE_DIAGRAM.md](docs/ARCHITECTURE_DIAGRAM.md) - pretty pictures of how things connect
+- [docs/OPENLANE_GUIDE.md](docs/OPENLANE_GUIDE.md) - if you wanna make an actual chip
+- [QUICKSTART.md](QUICKSTART.md) - getting started guide
+- [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) - summary of the whole thing
+- [CHECKLIST.md](CHECKLIST.md) - checklist for openlane flow
 
-## Project Structure
+## examples
 
-```
-Miyamii-4000/
-├── src/                    # Verilog source files
-│   ├── miyamii_4000.v     # Top-level processor
-│   ├── alu.v              # ALU with 16 operations
-│   ├── register_file.v    # 16x4-bit registers
-│   ├── pc_stack.v         # PC with 3-level stack
-│   ├── instruction_decoder.v  # Instruction decoder
-│   ├── control_fsm.v      # 8-state control FSM
-│   └── miyamii_4000_tb.v  # Testbench
-├── openlane/              # OpenLane configuration
-│   ├── config.json        # Alternative config format
-│   ├── pin_order.cfg      # Pin placement
-│   └── miyamii_4000.sdc   # Timing constraints
-├── docs/                  # Documentation
-│   ├── README.md          # Detailed documentation
-│   ├── INSTRUCTION_SET.md # Complete ISA reference
-│   ├── ARCHITECTURE_DIAGRAM.md # Visual diagrams
-│   └── OPENLANE_GUIDE.md  # ASIC flow guide
-├── examples/              # Example programs
-│   ├── fibonacci.asm      # Fibonacci sequence
-│   └── bcd_counter.asm    # BCD counter
-├── tools/                 # Development tools
-│   └── assembler.py       # Python assembler
-├── config.tcl             # Main OpenLane config
-├── run_openlane.sh        # Docker helper script
-└── Makefile              # Build automation
-```
+theres some assembly examples in the `examples/` folder:
+- fibonacci.asm - makes fibonacci numbers
+- bcd_counter.asm - counts in bcd i think
 
-## Architecture Highlights
+use the assembler in `tools/assembler.py` to turn them into machine code or whatever
 
-### Instruction Set Architecture
-- **1-byte instructions**: Arithmetic, logic, load/store
-- **2-byte instructions**: Jumps, immediate loads, conditional branches
-- **I/O instructions**: RAM/ROM port operations
-
-### Example Program
-```assembly
-START:  LDM 5       ; Load 5 into accumulator
-        XCH 0       ; Exchange with register 0
-        LDM 3       ; Load 3
-        ADD 0       ; Add R0 (result: 8)
-        JUN START   ; Jump back
-```
-
-### Register Architecture
-- 16 general-purpose registers (R0-R15)
-- 8 register pairs for 8-bit operations
-- 4-bit accumulator for ALU operations
-- 1-bit carry flag
-
-### Memory
-- **ROM**: 4096 x 8-bit (program memory)
-- **RAM**: 1280 x 4-bit (data memory)
-- Separate address spaces
-
-## Documentation
-
-- **[Full Documentation](docs/README.md)** - Complete architecture and implementation details
-- **[Instruction Set Reference](docs/INSTRUCTION_SET.md)** - All 45+ instructions with examples
-
-## Tools Required
-
-### For Simulation
-- Icarus Verilog (iverilog)
-- GTKWave (waveform viewer)
-- Verilator (optional, for linting)
-
-### For ASIC Flow
-- OpenLane (ASIC flow)
-- SKY130 PDK (or compatible)
-- Magic (layout viewer)
-- Klayout (GDS viewer)
-
-## Building
-
-```bash
-# Run simulation
-make sim
-
-# View waveforms
-make view
-
-# Lint the design
-make lint
-
-# Clean build artifacts
-make clean
-
-# Show all targets
-make help
-```
-
-## Performance
-
-- **Frequency**: 740 kHz
-- **Instruction time**: 86.4 μs (8 clock cycles)
-- **Throughput**: ~11,574 instructions/second
-- **Power**: TBD (post-synthesis)
-- **Area**: TBD (post-synthesis)
-
-## Module Hierarchy
+## the important bits
 
 ```
-miyamii_4000 (top module)
-├── alu              (4-bit ALU)
-├── register_file    (16x4 registers)
-├── pc_stack         (PC + stack)
-├── instruction_decoder (decode logic)
-└── control_fsm      (8-state FSM)
+src/              - all the verilog files
+openlane/         - config for making chips
+docs/             - where the real documentation lives
+examples/         - example programs
+tools/            - assembler and stuff
 ```
 
-## Testing
+## does it work
 
-The included testbench verifies:
-- ✅ Instruction fetch and decode
-- ✅ Arithmetic operations (ADD, SUB, INC, DEC)
-- ✅ Logic operations (CMA, RAL, RAR)
-- ✅ Register operations (LD, XCH, FIM)
-- ✅ Jump instructions (JUN, JCN, JMS)
-- ✅ Subroutine calls and returns
-- ✅ Stack operations
+yeah mostly. probably. i mean it runs in simulation so thats something
 
-## Why This Project?
+## license
 
-This started as a high school engineering project but evolved into a complete processor implementation because... why not go overkill? 😄
-
-It's a great learning project for:
-- Digital design and Verilog
-- Computer architecture
-- ASIC design flow with OpenLane
-- Instruction set architecture
-- Hardware-software interface
-
-## Future Ideas
-
-- [ ] Add comprehensive test suite
-- [ ] Optimize for area/power
-- [ ] Implement formal verification
-- [ ] Create assembler/compiler
-- [ ] Add peripherals (UART, SPI, timers)
-- [ ] Multi-chip configuration
-- [ ] Tape out with tiny tapeout!
-
-## References
-
-- Intel 4004 Microprocessor (1971)
-- MCS-4 Family User's Manual
-- OpenLane Documentation
-- SKY130 PDK Documentation
-
-## License
-
-This is an educational/hobby project. Feel free to use, modify, and learn from it!
-
-## Contributing
-
-Found a bug? Have an idea? Feel free to open an issue or submit a PR!
+do whatever you want with it idk. its for learning or whatever
 
 ---
 
-**Made with ❤️ (and probably too much coffee) for a high school engineering project**
-
-If you use this in your project, give it a ⭐!
+made for a high school project that got way too complicated
